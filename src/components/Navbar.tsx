@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLang } from '@/i18n/context';
+import LanguageSelector from './LanguageSelector';
 
 const navLinks = [
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Demo', href: '#demo' },
-  { label: 'Features', href: '#features' },
-  { label: 'Dashboard', href: '#dashboard' },
+  { key: 'howItWorks', href: '#how-it-works' },
+  { key: 'demo', href: '#demo' },
+  { key: 'features', href: '#features' },
+  { key: 'dashboard', href: '#dashboard' },
 ];
 
 export default function Navbar() {
+  const { t } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -56,7 +59,7 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -67,28 +70,32 @@ export default function Navbar() {
                     : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'
                 }`}
               >
-                {link.label}
+                {t.nav[link.key as keyof typeof t.nav]}
               </a>
             ))}
+            <LanguageSelector />
             <a
               href="#cta"
               className="px-5 py-2 bg-[var(--color-midnight)] text-white rounded-full text-sm font-semibold hover:bg-[var(--color-plum)] transition-colors"
             >
-              Get Early Access
+              {t.nav.cta}
             </a>
           </div>
 
           {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden w-10 h-10 flex items-center justify-center text-[var(--color-foreground)]"
-          >
-            <div className="space-y-1.5">
-              <div className={`w-6 h-0.5 bg-current transition-all ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <div className={`w-6 h-0.5 bg-current transition-all ${mobileOpen ? 'opacity-0' : ''}`} />
-              <div className={`w-6 h-0.5 bg-current transition-all ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-            </div>
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSelector />
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="w-10 h-10 flex items-center justify-center text-[var(--color-foreground)]"
+            >
+              <div className="space-y-1.5">
+                <div className={`w-6 h-0.5 bg-current transition-all ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
+                <div className={`w-6 h-0.5 bg-current transition-all ${mobileOpen ? 'opacity-0' : ''}`} />
+                <div className={`w-6 h-0.5 bg-current transition-all ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              </div>
+            </button>
+          </div>
         </div>
       </motion.nav>
 
@@ -109,7 +116,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] text-lg font-medium py-2"
                 >
-                  {link.label}
+                  {t.nav[link.key as keyof typeof t.nav]}
                 </a>
               ))}
               <a
@@ -117,7 +124,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className="mt-2 px-5 py-3 bg-[var(--color-midnight)] text-white rounded-full text-center font-semibold"
               >
-                Get Early Access
+                {t.nav.cta}
               </a>
             </div>
           </motion.div>
