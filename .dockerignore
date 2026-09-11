@@ -1,0 +1,16 @@
+# Exclude IDE, build artifacts, and secrets from the Docker build context
+.git
+.gitignore
+.idea
+*.iml
+*.iws
+out
+target
+.freebuff
+.env
+.env.*          !.env.example
+kissan-a.service
+nginx.conf
+init.sql
+kissan-ai.service
+DEPLOY-FREE.md
