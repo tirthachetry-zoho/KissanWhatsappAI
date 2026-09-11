@@ -4,13 +4,8 @@
 .idea
 *.iml
 *.iws
-out
-target
-.freebuff
+out/
+target/
+.freebuff/
+# Never send real env files (with secrets) into the build context
 .env
-.env.*          !.env.example
-kissan-a.service
-nginx.conf
-init.sql
-kissan-ai.service
-DEPLOY-FREE.md
