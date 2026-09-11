@@ -9,7 +9,9 @@
 # =============================================================================
 services:
   openwa:
-    image: openwa/wa-automate:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.openwa
     container_name: kissan-ai-openwa
     restart: unless-stopped
     ports:

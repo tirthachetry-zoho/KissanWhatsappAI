@@ -32,8 +32,8 @@ Since Render doesn't support docker-compose (multi-container), you need to deplo
 
 1. **Deploy OpenWA service first:**
    - Sign up at [render.com](https://render.com) (GitHub auth, no card).
-   - Click **New → Web Service** → **Deploy a public GitHub repository**.
-   - Repository: `openwa/wa-automate-docker` (or fork it for customization).
+   - Click **New → Web Service** → connect your Kissan-AI repository.
+   - **Important**: Set **Docker Context** to `Dockerfile.openwa` (this tells Render to use the OpenWA-specific Dockerfile).
    - Runtime: `Docker`.
    - Region: pick nearest.
    - Click **Create Web Service**.

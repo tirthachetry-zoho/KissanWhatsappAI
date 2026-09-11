@@ -1,0 +1,29 @@
+# =============================================================================
+#  Kissan-AI — OpenWA Dockerfile
+#  This Dockerfile is for deploying the OpenWA service separately on Render
+#  or other platforms that don't support docker-compose.
+# =============================================================================
+FROM openwa/wa-automate:latest
+
+LABEL maintainer="Kissan-AI"
+LABEL description="OpenWA WhatsApp Gateway for Kissan-AI"
+
+# Set default environment variables
+ENV PORT=3000
+ENV WHATSAPP_HOOK_URL=""
+ENV WHATSAPP_HOOK_SECRET=""
+ENV WHATSAPP_API_KEY=""
+ENV SESSION_NAME="kissan-assistant"
+ENV WHATSAPP_AUTO_REGISTER_WEBHOOK="false"
+
+# Create directory for sessions
+RUN mkdir -p /app/.sessions
+
+# Expose the default port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=5 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+
+# The base image already sets the entrypoint
