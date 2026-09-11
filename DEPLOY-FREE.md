@@ -31,9 +31,9 @@ Render auto-builds from the `Dockerfile` and gives a free PostgreSQL add-on.
 Since Render doesn't support docker-compose (multi-container), you need to deploy OpenWA as a separate service:
 
 1. **Deploy OpenWA service first:**
+   - OpenWA is now in a separate repository: https://github.com/tirthachetry-zoho/openwa
    - Sign up at [render.com](https://render.com) (GitHub auth, no card).
-   - Click **New → Web Service** → connect your Kissan-AI repository.
-   - **Important**: Set **Docker Context** to `Dockerfile.openwa` (this tells Render to use the OpenWA-specific Dockerfile).
+   - Click **New → Web Service** → connect the OpenWA repository.
    - Runtime: `Docker`.
    - Region: pick nearest.
    - Click **Create Web Service**.

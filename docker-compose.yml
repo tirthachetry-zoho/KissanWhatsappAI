@@ -9,9 +9,7 @@
 # =============================================================================
 services:
   openwa:
-    build:
-      context: .
-      dockerfile: Dockerfile.openwa
+    image: ghcr.io/tirthachetry-zoho/openwa:latest
     container_name: kissan-ai-openwa
     restart: unless-stopped
     ports:
