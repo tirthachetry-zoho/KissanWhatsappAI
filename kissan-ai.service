@@ -1,0 +1,48 @@
+# =============================================================================
+#  Kissan-AI — systemd service unit (bare-metal / VM deployment, JDK 17)
+#  Drop this file at:   /etc/systemd/system/kissan-ai.service
+#  Then:                sudo systemctl daemon-reload
+#                       sudo systemctl enable --now kissan-ai
+#                       sudo journalctl -fu kissan-ai
+# =============================================================================
+[Unit]
+Description=Kissan-AI — WhatsApp AI Assistant for Farmers
+Documentation=https://github.com/your-org/kishan-a
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# --- Build the production fast-jar once:  mvn -DskipTests package
+# --- Runnable artifact: target/quarkus-app/quarkus-run.jar
+WorkingDirectory=/opt/kissan-ai
+ExecStart=/usr/bin/java \
+  -Dquarkus.profile=prod \
+  -Dquarkus.http.port=8080 \
+  -XX:+UseG1GC \
+  -XX:MaxRAMPercentage=75.0 \
+  -Dnet.bytebuddy.experimental=true \
+  -jar ./quarkus-app/quarkus-run.jar
+
+# --- Environment: override via the systemd drop-in at
+# --- /etc/systemd/system/kissan-ai.service.d/env.conf (safer than hardcoding)
+EnvironmentFile=/etc/kissan-ai/env        # KEY=VALUE lines, no spaces
+Environment=JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Kolkata
+
+User=kissan
+Group=kissan
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/kissan-ai/target
+
+[Install]
+WantedBy=multi-user.target

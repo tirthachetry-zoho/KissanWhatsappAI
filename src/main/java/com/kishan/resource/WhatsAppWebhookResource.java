@@ -77,6 +77,7 @@ public class WhatsAppWebhookResource {
             farmer = new Farmer();
             farmer.setPhoneNumber(msg.getFrom());
             farmer.setLanguage(appConfig.defaultLanguage());
+            farmer.setLocation(appConfig.defaultState());
             if (value.getContacts() != null && !value.getContacts().isEmpty()
                     && value.getContacts().get(0).getProfile() != null) {
                 farmer.setName(value.getContacts().get(0).getProfile().getName());

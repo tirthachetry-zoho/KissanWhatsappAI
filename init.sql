@@ -1,0 +1,11 @@
+-- =============================================================================
+--  Kissan-AI — PostgreSQL initialization script
+--  Mounted into the postgres:16 container at /docker-entrypoint-initdb.d/.
+--
+--  NOTE: The application auto-creates its schema at startup via
+--  `quarkus.hibernate-orm.database.generation=update` (HBM2DDL UPDATE), so a
+--  schema-migration tool is NOT required for the MVP. This file is the place to
+--  add optional seed data or extra extensions once the schema is managed by
+--  a migration tool (Liquibase/Flyway) in the future.
+-- =============================================================================
+SELECT 'kissan-ai database ready';
