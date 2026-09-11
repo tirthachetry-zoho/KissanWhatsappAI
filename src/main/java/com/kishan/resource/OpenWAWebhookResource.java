@@ -8,6 +8,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.util.Map;
 
@@ -25,6 +28,7 @@ import java.util.Map;
 @Path("/webhook/openwa")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Tag(name = "OpenWA webhook", description = "Inbound events from the self-hosted OpenWA WhatsApp gateway")
 public class OpenWAWebhookResource {
 
     @Inject
@@ -35,6 +39,9 @@ public class OpenWAWebhookResource {
      * does not retry non-applicable events.
      */
     @POST
+    @Operation(summary = "Receive OpenWA events",
+            description = "Accepts the OpenWA envelope {event, timestamp, sessionId, idempotencyKey, deliveryId, data}. Only message.received from 1:1 chats is processed; everything else is acknowledged. Always returns 200 so the gateway does not retry.")
+    @APIResponse(responseCode = "200", description = "Event acknowledged")
     public Response receive(OpenWAWebhookEvent event) {
         if (event == null || event.getData() == null) {
             return Response.ok().build();

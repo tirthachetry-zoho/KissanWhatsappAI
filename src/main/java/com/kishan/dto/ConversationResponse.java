@@ -3,14 +3,20 @@ package com.kishan.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Conversation;
 import com.kishan.entity.ConversationStatus;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(name = "ConversationResponse", description = "Persisted conversation thread")
 public class ConversationResponse {
 
+    @Schema(description = "Database id", example = "1", readOnly = true)
     private Long id;
+    @Schema(description = "Farmer id", example = "1")
     private Long farmerId;
+    @Schema(description = "Detected intent", example = "crop_advice")
     private String intent;
+    @Schema(description = "Thread status")
     private ConversationStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

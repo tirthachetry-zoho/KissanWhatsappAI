@@ -81,6 +81,9 @@ public class HomeResource {
                   </div>
 
                   <h2>API endpoints</h2>
+                  <p>Interactive contract: <a href="/docs"><code>/docs</code></a> (Swagger UI)
+                     · machine-readable spec: <a href="/q/openapi"><code>/q/openapi</code></a> (YAML)
+                     · <a href="/q/openapi?format=json"><code>?format=json</code></a></p>
                   <table>
                     <tr><th>Endpoint</th><th>Purpose</th></tr>
                     <tr><td><code>GET /health</code></td><td>Health check</td></tr>
@@ -91,6 +94,7 @@ public class HomeResource {
                     <tr><td><code>GET /api/conversations</code></td><td>List conversations</td></tr>
                     <tr><td><code>GET /api/messages</code></td><td>List messages</td></tr>
                     <tr><td><code>GET /api/farms</code> · <code>/api/crops</code> · <code>/api/farm-events</code></td><td>Farm domain data</td></tr>
+                    <tr><td><code>GET /q/openapi</code> · <code>/docs</code></td><td>OpenAPI contract + Swagger UI</td></tr>
                   </table>
 
                   <h2>Integration status</h2>

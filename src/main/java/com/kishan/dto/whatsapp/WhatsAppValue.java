@@ -1,19 +1,26 @@
 package com.kishan.dto.whatsapp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.List;
 import java.util.Map;
 
+@Schema(name = "WhatsAppValue",
+        description = "Change payload: product, metadata, contacts (sender profiles) and messages (inbound items)")
 public class WhatsAppValue {
 
     @JsonProperty("messaging_product")
+    @Schema(description = "Always 'whatsapp'", example = "whatsapp")
     private String messagingProduct;
 
+    @Schema(description = "Business metadata: {display_phone_number, phone_number_id}")
     private Map<String, Object> metadata;
 
+    @Schema(description = "Sender contacts with profile names")
     private List<WhatsAppContact> contacts;
 
+    @Schema(description = "Inbound messages (text, image, audio, video, document)")
     private List<WhatsAppMessage> messages;
 
     public String getMessagingProduct() {

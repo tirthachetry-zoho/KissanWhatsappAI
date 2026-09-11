@@ -2,15 +2,22 @@ package com.kishan.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Farmer;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(name = "FarmerResponse", description = "Persisted farmer profile")
 public class FarmerResponse {
 
+    @Schema(description = "Database id", example = "1", readOnly = true)
     private Long id;
+    @Schema(description = "WhatsApp phone number", example = "919000000001")
     private String phoneNumber;
+    @Schema(description = "Farmer display name", example = "Ravi Kumar")
     private String name;
+    @Schema(description = "Preferred language code", example = "en")
     private String language;
+    @Schema(description = "Home location", example = "Madhya Pradesh")
     private String location;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

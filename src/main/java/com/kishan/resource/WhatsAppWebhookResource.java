@@ -11,10 +11,18 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Path("/webhook")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Tag(name = "WhatsApp webhook", description = "Meta WhatsApp Business API verification and inbound messages")
 public class WhatsAppWebhookResource {
 
     @Inject
@@ -31,9 +39,14 @@ public class WhatsAppWebhookResource {
      * verify token matches the configured token.
      */
     @GET
-    public Response verify(@QueryParam("hub.mode") String mode,
-                           @QueryParam("hub.verify_token") String token,
-                           @QueryParam("hub.challenge") String challenge) {
+    @Operation(summary = "Verify webhook with Meta",
+            description = "Called by Meta during webhook registration. Echoes hub.challenge (plain text) when mode is subscribe and the verify token matches.")
+    @APIResponse(responseCode = "200", description = "Challenge echoed back as plain text",
+            content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(type = SchemaType.STRING)))
+    @APIResponse(responseCode = "403", description = "Mode or verify token mismatch")
+    public Response verify(@Parameter(description = "Must be 'subscribe'", example = "subscribe") @QueryParam("hub.mode") String mode,
+                           @Parameter(description = "Must equal WHATSAPP_VERIFY_TOKEN") @QueryParam("hub.verify_token") String token,
+                           @Parameter(description = "Opaque challenge echoed back verbatim") @QueryParam("hub.challenge") String challenge) {
         if ("subscribe".equals(mode) && whatsappConfig.verifyToken().equals(token)) {
             return Response.ok(challenge).build();
         }
@@ -47,6 +60,9 @@ public class WhatsAppWebhookResource {
      */
     @POST
     @Transactional
+    @Operation(summary = "Receive WhatsApp messages",
+            description = "Upserts the farmer, finds/creates the active conversation, stores the incoming message, generates an AI reply and stores the outgoing message. Text, image, audio, video and document types are accepted.")
+    @APIResponse(responseCode = "200", description = "Payload accepted (processing is synchronous, reply stored server-side)")
     public Response receive(WhatsAppWebhook webhook) {
         if (webhook == null || webhook.getEntry() == null) {
             return Response.ok().build();

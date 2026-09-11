@@ -2,14 +2,19 @@ package com.kishan.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.FarmEvent;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Schema(name = "FarmEventResponse", description = "Persisted farm activity record")
 public class FarmEventResponse {
 
+    @Schema(description = "Database id", example = "1", readOnly = true)
     private Long id;
+    @Schema(description = "Farm id", example = "1")
     private Long farmId;
+    @Schema(description = "Activity type", example = "irrigation")
     private String eventType;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

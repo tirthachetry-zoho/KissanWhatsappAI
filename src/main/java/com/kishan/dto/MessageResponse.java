@@ -4,16 +4,24 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Message;
 import com.kishan.entity.MessageDirection;
 import com.kishan.entity.MessageType;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(name = "MessageResponse", description = "Persisted chat message")
 public class MessageResponse {
 
+    @Schema(description = "Database id", example = "1", readOnly = true)
     private Long id;
+    @Schema(description = "Conversation id", example = "1")
     private Long conversationId;
+    @Schema(description = "INCOMING (farmer) or OUTGOING (assistant)")
     private MessageDirection direction;
+    @Schema(description = "Message modality")
     private MessageType messageType;
+    @Schema(description = "Text content or media caption", example = "Tomato price today")
     private String content;
+    @Schema(description = "Media / attachment URL")
     private String mediaUrl;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

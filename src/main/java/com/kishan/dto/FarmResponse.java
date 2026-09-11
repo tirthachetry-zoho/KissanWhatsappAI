@@ -2,16 +2,24 @@ package com.kishan.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Farm;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(name = "FarmResponse", description = "Persisted farm plot")
 public class FarmResponse {
 
+    @Schema(description = "Database id", example = "1", readOnly = true)
     private Long id;
+    @Schema(description = "Owner farmer id", example = "1")
     private Long farmerId;
+    @Schema(description = "Plot location / village", example = "Sehore, MP")
     private String location;
+    @Schema(description = "Plot size", example = "2.5")
     private Double area;
+    @Schema(description = "Area unit", example = "acres")
     private String areaUnit;
+    @Schema(description = "Soil type", example = "Black cotton soil")
     private String soilType;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

@@ -86,6 +86,16 @@
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
 
+        <!-- OpenAPI / Swagger UI contract -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-swagger-ui</artifactId>
+        </dependency>
+
         <!-- Environment Configuration -->
         <dependency>
             <groupId>io.quarkus</groupId>

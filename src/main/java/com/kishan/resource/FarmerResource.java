@@ -10,25 +10,41 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.util.List;
 
 @Path("/api/farmers")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Farmers", description = "Farmer profiles identified by WhatsApp phone number")
 public class FarmerResource {
 
     @Inject
     AppConfig appConfig;
 
     @GET
+    @Operation(summary = "List all farmers", description = "Returns every farmer profile ordered by creation.")
+    @APIResponse(responseCode = "200", description = "List of farmers",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = FarmerResponse.class)))
     public List<FarmerResponse> list() {
         return Farmer.<Farmer>listAll().stream().map(FarmerResponse::from).toList();
     }
 
     @GET
     @Path("/{id}")
-    public Response get(@PathParam("id") Long id) {
+    @Operation(summary = "Get a farmer by id")
+    @APIResponse(responseCode = "200", description = "The farmer",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = FarmerResponse.class)))
+    @APIResponse(responseCode = "404", description = "Farmer not found")
+    public Response get(@Parameter(description = "Farmer id", required = true) @PathParam("id") Long id) {
         Farmer farmer = Farmer.findById(id);
         if (farmer == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -38,6 +54,11 @@ public class FarmerResource {
 
     @POST
     @Transactional
+    @Operation(summary = "Create a farmer", description = "Phone number must be unique; location defaults to the launch region when omitted.")
+    @APIResponse(responseCode = "201", description = "Farmer created",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = FarmerResponse.class)))
+    @APIResponse(responseCode = "409", description = "Phone number already registered")
     public Response create(@Valid FarmerCreate dto) {
         if (Farmer.find("phoneNumber", dto.getPhoneNumber()).firstResult() != null) {
             return Response.status(Response.Status.CONFLICT)
@@ -55,7 +76,12 @@ public class FarmerResource {
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response update(@PathParam("id") Long id, @Valid FarmerCreate dto) {
+    @Operation(summary = "Update a farmer")
+    @APIResponse(responseCode = "200", description = "Updated farmer",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = FarmerResponse.class)))
+    @APIResponse(responseCode = "404", description = "Farmer not found")
+    public Response update(@Parameter(description = "Farmer id", required = true) @PathParam("id") Long id, @Valid FarmerCreate dto) {
         Farmer farmer = Farmer.findById(id);
         if (farmer == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -73,7 +99,10 @@ public class FarmerResource {
     @DELETE
     @Path("/{id}")
     @Transactional
-    public Response delete(@PathParam("id") Long id) {
+    @Operation(summary = "Delete a farmer")
+    @APIResponse(responseCode = "204", description = "Farmer deleted")
+    @APIResponse(responseCode = "404", description = "Farmer not found")
+    public Response delete(@Parameter(description = "Farmer id", required = true) @PathParam("id") Long id) {
         if (!Farmer.deleteById(id)) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

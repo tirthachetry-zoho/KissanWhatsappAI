@@ -2,15 +2,21 @@ package com.kishan.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Crop;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Schema(name = "CropResponse", description = "Persisted crop record")
 public class CropResponse {
 
+    @Schema(description = "Database id", example = "1", readOnly = true)
     private Long id;
+    @Schema(description = "Farm id", example = "1")
     private Long farmId;
+    @Schema(description = "Crop name", example = "Tomato")
     private String crop;
+    @Schema(description = "Variety / cultivar", example = "Arka Rakshak")
     private String variety;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
