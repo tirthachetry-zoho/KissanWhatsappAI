@@ -19,6 +19,9 @@ WORKDIR /deploy
 ENV LANG='en_US:UTF-8' LC_ALL='en_US:UTF-8' \
     JAVA_OPTS="-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -Dquarkus.profile=prod"
 
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Create a non-root user (eclipse-temurin images have no uid 1000 by default)
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 

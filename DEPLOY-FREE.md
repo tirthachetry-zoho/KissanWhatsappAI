@@ -26,13 +26,34 @@ All options were validated against the production `Dockerfile` (JDK 17 build →
 
 Render auto-builds from the `Dockerfile` and gives a free PostgreSQL add-on.
 
-1. Sign up at [render.com](https://render.com) (GitHub auth, no card).
-2. Click **New → Web Service** → connect your repo.
-   - Runtime: leave auto-detected (`Docker`).
+### Deploying with OpenWA
+
+Since Render doesn't support docker-compose (multi-container), you need to deploy OpenWA as a separate service:
+
+1. **Deploy OpenWA service first:**
+   - Sign up at [render.com](https://render.com) (GitHub auth, no card).
+   - Click **New → Web Service** → **Deploy a public GitHub repository**.
+   - Repository: `openwa/wa-automate-docker` (or fork it for customization).
+   - Runtime: `Docker`.
    - Region: pick nearest.
+   - Click **Create Web Service**.
+   - On the OpenWA service → **Environment**, add:
+     ```
+     PORT = 3000
+     WHATSAPP_HOOK_URL = https://<your-kissan-ai-service>.onrender.com/openwa/webhook
+     WHATSAPP_HOOK_SECRET = <your-webhook-secret>
+     WHATSAPP_API_KEY = <your-api-key>
+     SESSION_NAME = kissan-assistant
+     ```
+   - Note the OpenWA service URL (e.g., `https://kissan-ai-openwa.onrender.com`).
+
+2. **Deploy Kissan-AI app:**
+   - Click **New → Web Service** → connect your repo.
+   - Runtime: leave auto-detected (`Docker`).
+   - Region: pick nearest (same as OpenWA for lower latency).
    - Click **Create Web Service** → Render builds your image and deploys it.
 3. Add a free database: **New → PostgreSQL** → choose **Free** (0.5 GB) → name it e.g. `kissan-ai-db`.
-4. On your service → **Environment → Secrets**, add:
+4. On your Kissan-AI service → **Environment → Secrets**, add:
    ```
    DB_URL            = <jdbc url from the database page, e.g. jdbc:postgresql://<host>:5432/<db>>
    DB_USER           = <db user>
@@ -40,6 +61,10 @@ Render auto-builds from the `Dockerfile` and gives a free PostgreSQL add-on.
    WHATSAPP_VERIFY_TOKEN = your-secret-token
    WHATSAPP_PHONE_NUMBER_ID = (from Meta dashboard)
    WHATSAPP_ACCESS_TOKEN    = (from Meta dashboard)
+   OPENWA_API_BASE_URL = https://<your-openwa-service>.onrender.com
+   OPENWA_API_KEY = <same-api-key-as-openwa-service>
+   OPENWA_SESSION_NAME = kissan-assistant
+   OPENWA_WEBHOOK_SECRET = <same-webhook-secret-as-openwa-service>
    JAVA_OPTS = -Dquarkus.http.port=10000   # Render expects port in $PORT; the Quarkus build picks it up
    ```
    Render injects `$PORT`; Quarkus honors it via `quarkus.http.port=${PORT:8080}` only if you
@@ -47,9 +72,23 @@ Render auto-builds from the `Dockerfile` and gives a free PostgreSQL add-on.
    set **Environment → Add Environment Variable** `QUARKUS_HTTP_PORT` = `$PORT` is not possible;
    instead use the **Autoscale / Port** setting "Port" = **8080** and let Render map it.
 5. Visit `https://<service>.onrender.com/health` → `{"status":"ok",...}`.
+6. Scan the QR code from the OpenWA service logs to connect your WhatsApp number:
+   - Go to your OpenWA service on Render → **Logs**.
+   - Look for the QR code URL or connect to the service endpoint to scan.
 
 Free tier limits: 512 MB RAM, 750 h/mo (≈ 1 month of uptime), PostgreSQL 0.5 GB / 100 k rows.
 The web service **sleeps after 15 min idle** (first request is slow) — fine for an MVP.
+
+### Alternative: Use docker-compose locally or on other platforms
+
+For local development or platforms that support docker-compose (Fly.io, Oracle Cloud, etc.),
+use the updated `docker-compose.yml` which includes both OpenWA and the app in one setup:
+
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+docker compose up -d --build
+```
 
 ## Option 2 — Google Cloud Run + Supabase (free, never sleeps)
 

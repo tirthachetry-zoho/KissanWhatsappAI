@@ -8,6 +8,28 @@
 #     docker compose logs -f app
 # =============================================================================
 services:
+  openwa:
+    image: openwa/wa-automate:latest
+    container_name: kissan-ai-openwa
+    restart: unless-stopped
+    ports:
+      - "${OPENWA_PORT:-2785}:3000"
+    environment:
+      PORT: 3000
+      WHATSAPP_HOOK_URL: "${OPENWA_WEBHOOK_URL:-http://app:8080/openwa/webhook}"
+      WHATSAPP_HOOK_SECRET: "${OPENWA_WEBHOOK_SECRET:-}"
+      WHATSAPP_API_KEY: "${OPENWA_API_KEY:-}"
+      SESSION_NAME: "${OPENWA_SESSION_NAME:-kissan-assistant}"
+      WHATSAPP_AUTO_REGISTER_WEBHOOK: "${OPENWA_AUTO_REGISTER_WEBHOOK:-false}"
+    volumes:
+      - openwa_session:/app/.sessions
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
   app:
     build: .
     container_name: kissan-ai-app
@@ -19,8 +41,15 @@ services:
     environment:
       JAVA_OPTS: "${JAVA_OPTS:-}"
       JAVA_OPTS_EXTRA: "${JAVA_OPTS_EXTRA:-}"
+      OPENWA_API_BASE_URL: "http://openwa:3000"
+    depends_on:
+      openwa:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 15s
       timeout: 5s
       retries: 10
+
+volumes:
+  openwa_session:
