@@ -2,12 +2,10 @@ package com.kishan.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.FarmEvent;
-import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
 public class FarmEventResponse {
 
     private Long id;
@@ -35,5 +33,69 @@ public class FarmEventResponse {
         dto.setNotes(event.getNotes());
         dto.setCreatedAt(event.getCreatedAt());
         return dto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getFarmId() {
+        return farmId;
+    }
+
+    public void setFarmId(Long farmId) {
+        this.farmId = farmId;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

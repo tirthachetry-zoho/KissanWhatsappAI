@@ -1,4 +1,4 @@
-# Kishan-A — WhatsApp AI Assistant for Farmers
+# Kissan-AI — WhatsApp AI Assistant for Farmers
 
 A low-cost, phone-first agricultural assistant that farmers can reach through
 WhatsApp. Built in **Java 17 + Quarkus** (converted from the original Python/FastAPI
@@ -6,7 +6,8 @@ prototype described in `PRD — WhatsApp AI Assistant for Farmers.md`).
 
 Farmers can ask about crop problems, weather, market prices and fertilizer,
 send voice notes and images, and get answers in **English, Kannada or Hindi** —
-in the language they prefer.
+in the language they prefer. The MVP ships as an offline, rule-based assistant,
+so it runs with zero configuration and no API keys.
 
 > The MVP keeps the AI abstraction behind the `AIService` interface (PRD §14).
 > It ships with an **offline, rule-based `SimpleAIService`** so the app runs with
@@ -20,7 +21,7 @@ in the language they prefer.
 | Area            | Details |
 |-----------------|---------|
 | WhatsApp webhook | `GET /webhook` verification + `POST /webhook` receive (text, image, audio, video, document) |
-| Farmer profile   | Register by phone number, language, location; progressive profile |
+| Farmer profile   | Register by phone number, language, location; progressive profile. New farmers default to **Madhya Pradesh** (configurable via `app.default-state`) |
 | Farm & crops     | Register farms, crops, planting dates and growth stages |
 | Farm log         | Log fertilizer/pesticide/harvest events with quantity and cost |
 | Conversations    | Automatic conversation & turn memory per farmer |
@@ -53,7 +54,7 @@ mvn quarkus:dev
 
 # 2. Verify it is up
 curl http://localhost:8080/health
-# {"service":"kishan-a","timestamp":"...","status":"ok"}
+# {"service":"kissan-ai","timestamp":"...","status":"ok"}
 
 # 3. Run the full test suite
 mvn test
@@ -67,7 +68,7 @@ to start experimenting**.
 Set these environment variables (see [`.env.example`](.env.example)):
 
 ```bash
-export DB_URL=jdbc:postgresql://localhost:5432/kishan_a
+export DB_URL=jdbc:postgresql://localhost:5432/kissan_ai
 export DB_USER=postgres
 export DB_PASSWORD=postgres
 export WHATSAPP_VERIFY_TOKEN=replace-me
@@ -81,7 +82,7 @@ Tables are created automatically at startup (`quarkus.hibernate-orm.database.gen
 
 | Variable                  | Default              | Purpose |
 |---------------------------|----------------------|---------|
-| `DB_URL`                  | `jdbc:postgresql://localhost:5432/kishan_a` | Production JDBC URL |
+| `DB_URL`                  | `jdbc:postgresql://localhost:5432/kissan_ai` | Production JDBC URL |
 | `DB_USER`                 | `postgres`           | Database user |
 | `DB_PASSWORD`             | `postgres`           | Database password |
 | `WHATSAPP_API_URL`        | `https://graph.facebook.com/v18.0` | Meta Graph API base |

@@ -110,6 +110,50 @@ public class FarmerResourceTest {
     }
 
     @Test
+    void locationDefaultsToMadhyaPradeshWhenOmitted() {
+        long id = given()
+                .contentType("application/json")
+                .body("{\"phoneNumber\": \"919700000006\", \"name\": \"MP Farmer\"}")
+                .when().post("/api/farmers")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        given()
+                .when().get("/api/farmers/{id}", id)
+                .then()
+                .statusCode(200)
+                .body("location", equalTo("Madhya Pradesh"));
+    }
+
+    @Test
+    void explicitLocationIsKept() {
+        given()
+                .contentType("application/json")
+                .body("{\"phoneNumber\": \"919700000007\", \"name\": \"Local Farmer\", \"location\": \"Indore\"}")
+                .when().post("/api/farmers")
+                .then().statusCode(201)
+                .body("location", equalTo("Indore"));
+    }
+
+    @Test
+    void updateDoesNotWipeLocationWhenOmitted() {
+        long id = given()
+                .contentType("application/json")
+                .body("{\"phoneNumber\": \"919700000008\", \"name\": \"Update Me\"}")
+                .when().post("/api/farmers")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        given()
+                .contentType("application/json")
+                .body("{\"phoneNumber\": \"919700000008\", \"name\": \"Updated\"}")
+                .when().put("/api/farmers/{id}", id)
+                .then()
+                .statusCode(200)
+                .body("location", equalTo("Madhya Pradesh"));
+    }
+
+    @Test
     void getMissingFarmerReturns404() {
         given()
                 .when().get("/api/farmers/99999999")

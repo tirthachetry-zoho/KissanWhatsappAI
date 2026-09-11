@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 
 import java.time.LocalDate;
 
-@Data
 public class CropCreate {
 
     @NotNull
@@ -29,4 +27,52 @@ public class CropCreate {
 
     @Size(max = 50)
     private String growthStage;
+
+    public Long getFarmId() {
+        return farmId;
+    }
+
+    public void setFarmId(Long farmId) {
+        this.farmId = farmId;
+    }
+
+    public String getCrop() {
+        return crop;
+    }
+
+    public void setCrop(String crop) {
+        this.crop = crop;
+    }
+
+    public String getVariety() {
+        return variety;
+    }
+
+    public void setVariety(String variety) {
+        this.variety = variety;
+    }
+
+    public LocalDate getPlantingDate() {
+        return plantingDate;
+    }
+
+    public void setPlantingDate(LocalDate plantingDate) {
+        this.plantingDate = plantingDate;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getGrowthStage() {
+        return growthStage;
+    }
+
+    public void setGrowthStage(String growthStage) {
+        this.growthStage = growthStage;
+    }
 }

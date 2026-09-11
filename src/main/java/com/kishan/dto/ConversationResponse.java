@@ -3,11 +3,9 @@ package com.kishan.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Conversation;
 import com.kishan.entity.ConversationStatus;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
 public class ConversationResponse {
 
     private Long id;
@@ -30,5 +28,53 @@ public class ConversationResponse {
         dto.setCreatedAt(conversation.getCreatedAt());
         dto.setUpdatedAt(conversation.getUpdatedAt());
         return dto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getFarmerId() {
+        return farmerId;
+    }
+
+    public void setFarmerId(Long farmerId) {
+        this.farmerId = farmerId;
+    }
+
+    public String getIntent() {
+        return intent;
+    }
+
+    public void setIntent(String intent) {
+        this.intent = intent;
+    }
+
+    public ConversationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ConversationStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

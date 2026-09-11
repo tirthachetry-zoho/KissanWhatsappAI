@@ -15,7 +15,7 @@ import java.util.Map;
 public class HealthResource {
 
     @Inject
-    @ConfigProperty(name = "quarkus.application.name", defaultValue = "kishan-ai")
+    @ConfigProperty(name = "quarkus.application.name", defaultValue = "kissan-ai")
     String serviceName;
 
     @GET

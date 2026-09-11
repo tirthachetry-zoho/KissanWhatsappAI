@@ -2,15 +2,11 @@ package com.kishan.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "crops")
 public class Crop extends PanacheEntity {
@@ -36,4 +32,61 @@ public class Crop extends PanacheEntity {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    // Getters and Setters
+    public Farm getFarm() {
+        return farm;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
+    }
+
+    public String getCrop() {
+        return crop;
+    }
+
+    public void setCrop(String crop) {
+        this.crop = crop;
+    }
+
+    public String getVariety() {
+        return variety;
+    }
+
+    public void setVariety(String variety) {
+        this.variety = variety;
+    }
+
+    public LocalDate getPlantingDate() {
+        return plantingDate;
+    }
+
+    public void setPlantingDate(LocalDate plantingDate) {
+        this.plantingDate = plantingDate;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getGrowthStage() {
+        return growthStage;
+    }
+
+    public void setGrowthStage(String growthStage) {
+        this.growthStage = growthStage;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

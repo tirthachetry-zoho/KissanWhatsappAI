@@ -36,11 +36,11 @@ public class SimpleAIService implements AIService {
         }
         if (text.contains("kannada")) {
             farmer.setLanguage("kn");
-            return "ನಮಸ್ಕಾರ! ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿದೆ. ನಾನು ಕಿಶನ್-ಎ ಸಹಾಯಕ. ನಿಮ್ಮ ಬೆಳೆ, ಹವಾಮಾನ ಅಥವಾ ಮಾರುಕಟ್ಟೆ ಬಗ್ಗೆ ಕೇಳಿ.";
+            return "ನಮಸ್ಕಾರ! ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿದೆ. ನಾನು ಕಿಸಾನ್-ಎಐ ಸಹಾಯಕ. ನಿಮ್ಮ ಬೆಳೆ, ಹವಾಮಾನ ಅಥವಾ ಮಾರುಕಟ್ಟೆ ಬಗ್ಗೆ ಕೇಳಿ.";
         }
         if (text.contains("hindi")) {
             farmer.setLanguage("hi");
-            return "नमस्ते! आपकी भाषा हिंदी में बदल दी गई है। मैं किशन-ए सहायक हूँ। अपनी फसल, मौसम या बाज़ार के बारे में पूछें।";
+            return "नमस्ते! आपकी भाषा हिंदी में बदल दी गई है। मैं किसान-एआई सहायक हूँ। अपनी फसल, मौसम या बाज़ार के बारे में पूछें।";
         }
         return defaultResponse(lang);
     }
@@ -71,9 +71,9 @@ public class SimpleAIService implements AIService {
 
     private String defaultResponse(String lang) {
         return switch (lang) {
-            case "kn" -> "ನಮಸ್ಕಾರ! ನಾನು ಕಿಶನ್-ಎ ಸಹಾಯಕ. ಬೆಳೆ ಸಮಸ್ಯೆ, ಹವಾಮಾನ, ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ಅಥವಾ ಗೊಬ್ಬರದ ಬಗ್ಗೆ ಕೇಳಿ. ನಾನು ಕನ್ನಡ, ಹಿಂದಿ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಬೆಂಬಲಿಸುತ್ತೇನೆ.";
-            case "hi" -> "नमस्ते! मैं किशन-ए सहायक हूँ। फसल समस्या, मौसम, बाज़ार भाव या खाद के बारे में पूछें। मैं हिंदी, कन्नड़ और अंग्रेज़ी का समर्थन करता हूँ।";
-            default -> "Hello! I am Kishan-A, your farming assistant. Ask about crop problems, weather, market prices, or fertilizer. I support English, Kannada, and Hindi.";
+            case "kn" -> "ನಮಸ್ಕಾರ! ನಾನು ಕಿಸಾನ್-ಎಐ ಸಹಾಯಕ. ಬೆಳೆ ಸಮಸ್ಯೆ, ಹವಾಮಾನ, ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ಅಥವಾ ಗೊಬ್ಬರದ ಬಗ್ಗೆ ಕೇಳಿ. ನಾನು ಕನ್ನಡ, ಹಿಂದಿ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಬೆಂಬಲಿಸುತ್ತೇನೆ.";
+            case "hi" -> "नमस्ते! मैं किसान-एआई सहायक हूँ। फसल समस्या, मौसम, बाज़ार भाव या खाद के बारे में पूछें। मैं हिंदी, कन्नड़ और अंग्रेज़ी का समर्थन करता हूँ।";
+            default -> "Hello! I am Kissan-AI, your farming assistant. Ask about crop problems, weather, market prices, or fertilizer. I support English, Kannada, and Hindi.";
         };
     }
 }

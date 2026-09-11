@@ -1,8 +1,10 @@
 package com.kishan.resource;
 
+import com.kishan.config.AppConfig;
 import com.kishan.dto.FarmerCreate;
 import com.kishan.dto.FarmerResponse;
 import com.kishan.entity.Farmer;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -15,6 +17,9 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FarmerResource {
+
+    @Inject
+    AppConfig appConfig;
 
     @GET
     public List<FarmerResponse> list() {
@@ -42,7 +47,7 @@ public class FarmerResource {
         farmer.setPhoneNumber(dto.getPhoneNumber());
         farmer.setName(dto.getName());
         farmer.setLanguage(dto.getLanguage());
-        farmer.setLocation(dto.getLocation());
+        farmer.setLocation(locationOrDefault(dto.getLocation()));
         farmer.persistAndFlush();
         return Response.status(Response.Status.CREATED).entity(FarmerResponse.from(farmer)).build();
     }
@@ -58,7 +63,9 @@ public class FarmerResource {
         farmer.setPhoneNumber(dto.getPhoneNumber());
         farmer.setName(dto.getName());
         farmer.setLanguage(dto.getLanguage());
-        farmer.setLocation(dto.getLocation());
+        if (dto.getLocation() != null && !dto.getLocation().isBlank()) {
+            farmer.setLocation(dto.getLocation());
+        }
         farmer.persist();
         return Response.ok(FarmerResponse.from(farmer)).build();
     }
@@ -71,5 +78,10 @@ public class FarmerResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.noContent().build();
+    }
+
+    /** Fall back to the launch-state default when no location is given. */
+    private String locationOrDefault(String location) {
+        return location == null || location.isBlank() ? appConfig.defaultState() : location;
     }
 }

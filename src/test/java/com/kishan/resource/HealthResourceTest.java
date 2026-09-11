@@ -19,7 +19,7 @@ public class HealthResourceTest {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("status", equalTo("ok"))
-                .body("service", equalTo("kishan-ai"))
+                .body("service", equalTo("kissan-ai"))
                 .body("timestamp", notNullValue());
     }
 }

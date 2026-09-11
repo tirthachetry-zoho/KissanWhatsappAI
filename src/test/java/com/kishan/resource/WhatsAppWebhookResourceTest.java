@@ -63,12 +63,13 @@ public class WhatsAppWebhookResourceTest {
                 .then()
                 .statusCode(200);
 
-        // Farmer created with profile name
+        // Farmer created with profile name and MP default location
         given()
                 .when().get("/api/farmers")
                 .then()
                 .statusCode(200)
-                .body("phoneNumber", hasItem(phone));
+                .body("phoneNumber", hasItem(phone))
+                .body("find { it.phoneNumber == '%s' }.location".formatted(phone), equalTo("Madhya Pradesh"));
 
         long farmerId = given()
                 .when().get("/api/farmers")

@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kishan.entity.Message;
 import com.kishan.entity.MessageDirection;
 import com.kishan.entity.MessageType;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
 public class MessageResponse {
 
     private Long id;
@@ -31,5 +29,61 @@ public class MessageResponse {
         dto.setMediaUrl(message.getMediaUrl());
         dto.setTimestamp(message.getTimestamp());
         return dto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(Long conversationId) {
+        this.conversationId = conversationId;
+    }
+
+    public MessageDirection getDirection() {
+        return direction;
+    }
+
+    public void setDirection(MessageDirection direction) {
+        this.direction = direction;
+    }
+
+    public MessageType getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }
