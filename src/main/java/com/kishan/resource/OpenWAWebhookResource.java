@@ -1,6 +1,7 @@
 package com.kishan.resource;
 
 import com.kishan.entity.MessageType;
+import com.kishan.observability.WebhookTracer;
 import com.kishan.openwa.OpenWAWebhookEvent;
 import com.kishan.service.WhatsAppMessageProcessor;
 import io.quarkus.logging.Log;
@@ -34,6 +35,9 @@ public class OpenWAWebhookResource {
     @Inject
     WhatsAppMessageProcessor processor;
 
+    @Inject
+    WebhookTracer webhookTracer;
+
     /**
      * Receives OpenWA webhook events and always answers 200 so the gateway
      * does not retry non-applicable events.
@@ -50,10 +54,13 @@ public class OpenWAWebhookResource {
         Log.debugf("Received OpenWA webhook event: %s", event.getEvent());
 
         if ("message.received".equals(event.getEvent())) {
-            try {
+            String phone = WhatsAppMessageProcessor.stripJid(asString(event.getData().get("from")));
+            try (var span = webhookTracer.start("openwa", "message.received", phone)) {
                 processMessage(event.getData());
+                span.mark("accepted");
             } catch (RuntimeException e) {
                 // Never bubble up: OpenWA would retry, and the reply is best-effort.
+                webhookTracer.start("openwa", "message.received", phone).markFailed("handle-failed", e);
                 Log.errorf(e, "Error processing OpenWA message.received event");
             }
         }

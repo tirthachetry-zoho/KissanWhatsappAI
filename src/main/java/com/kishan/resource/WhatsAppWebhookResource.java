@@ -4,6 +4,7 @@ import com.kishan.config.AppConfig;
 import com.kishan.config.WhatsAppConfig;
 import com.kishan.dto.whatsapp.*;
 import com.kishan.entity.*;
+import com.kishan.observability.WebhookTracer;
 import com.kishan.service.AIService;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
@@ -33,6 +34,9 @@ public class WhatsAppWebhookResource {
 
     @Inject
     AIService aiService;
+
+    @Inject
+    WebhookTracer webhookTracer;
 
     /**
      * WhatsApp webhook verification (GET). Echoes hub.challenge when the
@@ -77,7 +81,14 @@ public class WhatsAppWebhookResource {
                     continue;
                 }
                 for (WhatsAppMessage msg : value.getMessages()) {
-                    handleMessage(value, msg);
+                    String phone = msg.getFrom();
+                    try (var span = webhookTracer.start("meta", "message.received", phone)) {
+                        handleMessage(value, msg);
+                        span.mark("accepted");
+                    } catch (RuntimeException e) {
+                        webhookTracer.start("meta", "message.received", phone).markFailed("handle-failed", e);
+                        throw e;
+                    }
                 }
             }
         }
